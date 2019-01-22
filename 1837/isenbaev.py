@@ -21,8 +21,7 @@ class Tree:
 		self.topNode = topNode
 
 	def addNode(self, connectionPersonName, node):
-		searchingNodes = []
-		searchingNodes.extend(self.topNode.connectedNodes)
+		searchingNodes = [self.topNode]
 		nextNodes = []
 		while searchingNodes:
 			currentNode = searchingNodes.pop()
@@ -76,33 +75,16 @@ for team in teamsList:
 	teammatesMap[team.second].update([team.first, team.third])
 	teammatesMap[team.third].update([team.first, team.second])
 
-isenbaevTeams = set([team for team in teamsList if team.hasIsenbaev])
-
-isenbaevTeammates = set()
-isenbaevTeammatesNames = set()
-
-for team in isenbaevTeams:
-	
-	if team.first != "Isenbaev" and not team.first in isenbaevTeammatesNames:
-		isenbaevTeammates.add(Node(team.first))
-	if team.second != "Isenbaev" and not team.second in isenbaevTeammatesNames:
-		isenbaevTeammates.add(Node(team.second))
-	if team.third != "Isenbaev" and not team.third in isenbaevTeammatesNames:
-		isenbaevTeammates.add(Node(team.third))
-
-	isenbaevTeammatesNames.update([team.first, team.second, team.third])
-
-
-isenbaevNode = Node("Isenbaev", isenbaevTeammates)
+isenbaevNode = Node("Isenbaev")
 tree = Tree(isenbaevNode)
 
-insertedInTree = set(isenbaevTeammatesNames)
-iterationSet = set(isenbaevTeammatesNames)
+insertedInTree = set(["Isenbaev"])
+iterationSet = set(["Isenbaev"])
 nextIterationSet = set()
 
 while iterationSet:
 	person = iterationSet.pop()
-	personTeammates = teammatesMap[person]
+	personTeammates = teammatesMap.get(person, [])
 	for teamMate in personTeammates:
 		if not teamMate in insertedInTree:
 			tree.addNode(person, Node(teamMate))
